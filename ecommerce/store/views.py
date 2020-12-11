@@ -5,6 +5,8 @@ import json
 import datetime
 from .utils import *
 from django.views.decorators.csrf import csrf_exempt
+import requests
+import razorpay
 # Create your views here.
 def homepage(request):
     cart_data=cartData(request)
@@ -12,20 +14,12 @@ def homepage(request):
     products=Product.objects.all()
     context={'products':products,'cartItems':cartItems}
     return render(request,'store/homepage.html',context)
-
-
-
-
 def cart(request):
     cart_data=cartData(request)
     items=cart_data['items']
     order=cart_data['order']
     cartItems=cart_data['cartItems']
     return render(request,"store/cart.html",{"items":items,"order":order,"cartItems":cartItems})
-
-
-
-
 def checkout(request):
     cart_data=cartData(request)
     items=cart_data['items']
@@ -53,24 +47,16 @@ def updateitem(request):
 
 def processOrder(request):
     transaction_id=datetime.datetime.now().timestamp()
-    
     data=json.loads(request.body)
-
     if request.user.is_authenticated:
         customer=request.user.customer
         order,created=Order.objects.get_or_create(customer=customer,complete=False)
-        
-        
-        
-
     else:
         customer,order=guestOrder(request,data )
     total=float(data['form']['total'])
     order.transaction_id=transaction_id
     if total==float(order.get_cart_total):
-        print("here")
         order.complete=True
-        print(order.complete)
     order.save() 
     if order.shipping==True:
         ShippingAddress.objects.create(
@@ -81,21 +67,7 @@ def processOrder(request):
             state=data['shipping']['state'],
             pincode=data['shipping']['zipcode']
 
-        ) 
-    
+        )
     return JsonResponse('Payment Complete',safe=False)
-    #param_dict={
-    #    'MID':'WorldP64425807474247',
-    #    'ORDER_ID':order.transaction_id,
-    #   'TXN_AMOUNT':'1',
-    #    'CUST_ID':customer.email,
-    #    'INDUSTRY_TYPE_ID':'Retail',
-    #    'WEBSITE':'WEBSTAGING',
-    #    'CHANNEL_ID':'WEB',
-	#    'CALLBACK_URL':'http://127.0.0.1:8000/paytm_process/',
-    #}
-    #return render(request,'store/paytm.html',{'param_dict':param_dict})
-#@csrf_exempt
-#def paytm_process(request):
-   # pass
     
+

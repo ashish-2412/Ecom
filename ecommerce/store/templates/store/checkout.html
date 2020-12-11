@@ -41,8 +41,11 @@
         </div>
         <br>
         <div class="box-element hidden" id="payment-info">
-            <small>PayPal</small>
-            <button class="btn btn-primary" id="make-payment" value="Make Payment">Make Payment</button>
+            <small>Paytm</small>
+            <div id="paypal-button-container">
+
+            </div>
+            <!--<button class="btn btn-primary" id="make-payment" value="Make Payment">Make Payment</button>-->
 
         </div>
 
@@ -68,10 +71,33 @@
         </div>
     </div>
 </div>
+<script src="https://www.paypal.com/sdk/js?client-id=AcMQbZROrpSSUJ06q8b5vuQcaq8fAtw8Mnh9svQ4SjyG_MqrOQS59lR8JvTjsuLrX4fPpYRxDIpcXddg&currency=INR"></script>
+<script>
+    var total='{{order.get_cart_total}}'
+    paypal.Buttons({
+      createOrder: function(data, actions) {
+        // This function sets up the details of the transaction, including the amount and line item details.
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: parseFloat(total).toFixed(2)
+            }
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+      // This function captures the funds from the transaction.
+      return actions.order.capture().then(function(details) {
+          console.log(details.transactions[0].related_resources[0].sale.id)
+        submitFormData()
+      });
+    }
+    }).render('#paypal-button-container');
+  </script>
 
 <script type="text/javascript">
     var shipping='{{order.shipping}}'
-    var total='{{order.get_cart_total}}'
+    
     console.log(shipping) 
     if(shipping=='False')
     {
@@ -94,7 +120,7 @@
         document.getElementById('form-button').classList.add('hidden')
         document.getElementById('payment-info').classList.remove('hidden')
     })
-    document.getElementById('make-payment').addEventListener('click',submitFormData)
+    /*document.getElementById('make-payment').addEventListener('click',submitFormData)*/
     function submitFormData()
     {
         alert("button clicked")
