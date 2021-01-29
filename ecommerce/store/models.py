@@ -67,6 +67,8 @@ class OrderItem(models.Model):
     def get_total(self):
         total=self.product.price*self.quantity
         return total
+    def __str__(self):
+        return self.product.name
 
 
 class ShippingAddress(models.Model):

@@ -6,7 +6,6 @@ import datetime
 from .utils import *
 from django.views.decorators.csrf import csrf_exempt
 import requests
-import razorpay
 # Create your views here.
 def homepage(request):
     cart_data=cartData(request)
