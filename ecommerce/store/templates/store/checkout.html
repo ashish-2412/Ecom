@@ -53,7 +53,7 @@
         </div>
         <div class="col-lg-6">
             <div class="box-element">
-                <a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+                <a  class="btn btn-outline-dark" href="{% url 'store:cart' %}">&#x2190; Back to Cart</a>
                 <hr>
                 <h3>Order Summary</h3>
                 <hr>
@@ -165,7 +165,7 @@
             alert("Transaction complete");
             cart={}
             document.cookie='cart='+JSON.stringify(cart) + ";domain=;path=/"
-            window.location.href="{% url 'homepage' %}"
+            window.location.href="{% url 'store:homepage' %}"
 
         })
 

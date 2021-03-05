@@ -1,13 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from phonenumber_field.modelfields import PhoneNumberField
 # Create your models here.
 class Customer(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE,blank=True,null=True)
-    name=models.CharField(max_length=200,)
-    email=models.EmailField(max_length=200,)
+    phone=PhoneNumberField()
     def __str__(self):
-        return self.name
+        return self.user.username
 
 class Product(models.Model):
     name=models.CharField(max_length=200,null=True)
@@ -15,8 +14,8 @@ class Product(models.Model):
     digital=models.BooleanField(default=False)
     def __str__(self):
         return self.name
-    image=models.ImageField(null=True,blank=True)
-
+    image=models.ImageField(null=True,blank=True,upload_to='images')
+    
     @property
     def imageURL(self):
         try:
@@ -62,7 +61,6 @@ class OrderItem(models.Model):
     order=models.ForeignKey(Order, on_delete=models.SET_NULL,blank=True,null=True)
     quantity=models.IntegerField(default=0)
     date_added=models.DateTimeField(auto_now_add=True)
-
     @property
     def get_total(self):
         total=self.product.price*self.quantity

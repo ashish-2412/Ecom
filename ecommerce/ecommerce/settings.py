@@ -122,9 +122,11 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS=[
     os.path.join(BASE_DIR,'static')
     ]
-MEDIA_ROOT=os.path.join(BASE_DIR,'static/images')
-MEDIA_URL="/images/"
+MEDIA_ROOT=os.path.join(BASE_DIR,'static')
+MEDIA_URL="/ecommerce/static/"
 PAYMENT_VARIANTS = {
     'razorpay': ('django_payments_razorpay.RazorPayProvider', {
         'public_key': 'RAZORPAY_PUBLIC_KEY',
         'secret_key': 'RAZORPAY_SECRET_KEY'})}
+PHONENUMBER_DEFAULT_REGION = 'IN'
+LOGIN_URL='login/'

@@ -1,0 +1,19 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="jumbotron">
+        <h1>Login!</h1>
+        <form action="{% url 'store:customer_login' %}" method="post">
+            {% csrf_token %}
+            <label for="username">Username :</label>
+            <input type="text" name="username" id="" placeholder="Enter your username :">
+
+            <label for="password">Password</label>
+            <input type="password" name="password" id="" placeholder="Enter your password :">
+
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</div>
+{% endblock %}

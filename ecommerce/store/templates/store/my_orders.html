@@ -1,0 +1,67 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block content %}
+<div class="my-orders">
+    <div class="container">
+        {% for order in orders %}
+        <div class="order-block">
+            <div class="order-block-top">
+                <div class="row">
+                    <div class="col-lg-4 order-date">
+                        <h3>ORDER PLACED</h3>
+                        <p>{{order.order.date_ordered.date}}</p>
+                    </div>
+                    <div class="col-lg-2 order-total">
+                        <h3>TOTAL</h3>
+                        <p>Rs {{order.product.price}}</p>
+                    </div>
+                    <div class="col-lg-2 shipping-details">
+                        <h3>SHIP TO</h3>
+                        <p>{{order.order.customer}}</p>
+                    </div>
+                        
+                    <div class="col-lg-4 order-id">
+                        <h3>ORDER ID</h3>
+                        <p>{{order.order.transaction_id}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="delivery-status">
+                {% if order.product.digital == False %}
+                <h3>DELIVERY STATUS :</h3>
+                
+                <p>In-transit</p>
+                {% endif %}
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3" style="text-align: end;">
+                    <img style="margin-right: 20%;" width="45%" src="{{order.product.imageURL}}" alt="">
+                </div>
+                <div class="col-lg-6 order-details">
+                    <h4>{{order.product.name}}</h4>
+                    <p>Quantity : {{order.quantity}}</p>
+                    {% if order.product.digital == False %}
+                    <p class="type">Type : Hardback</p>
+
+                    {% else %}
+                    <p class="type">Type : Digital Copy</p>
+
+                    <a href="{% url 'store:view_book' pk=order.pk %}"><button class="btn btn-warning">Open Book</button></a>
+                    {% endif %}
+                </div>
+                <div class="col-lg-3 order-options">
+                    <button class="btn btn-info">Track Order</button>
+                    <button class="btn btn-info">Return </button>
+                    <a href="{% url 'store:download_invoice' pk=order.pk %}"><button class="btn btn-info">Download Invoice</button></a>
+                </div>
+            </div>
+            
+        </div>
+            
+        {% endfor %}
+    </div>
+    
+</div>
+    
+{% endblock %}
